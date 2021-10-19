@@ -1,4 +1,4 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
@@ -7,12 +7,13 @@ import time
 
 MAX_WAIT = 10 #maksymalny czas czekania na glicze
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
 	def setUp(self):
 		self.browser = webdriver.Safari()
 
 	def tearDown(self):
+		self.browser.refresh()
 		self.browser.quit()	
 	
 	# Edith has heard about a cool new online to-do app. She goes
