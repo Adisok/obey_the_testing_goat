@@ -39,3 +39,16 @@ class FunctionalTest(StaticLiveServerTestCase):
 					raise e
 				time.sleep(0.5)
 
+	def wait_for(self, fn):
+		start_time = time.time()
+		while True:
+			try:
+				return fn()
+			except (AssertionError, WebDriverException) as e:
+					#Lapiemy wyjatki, WebDriverException, czyli gdy strona sie nie zaladowala,
+					# i Selenium nie moze znalezc elementu na stronie,
+					# AssertionError, gdy tabela jest na stronie ale pewnie jest to przed odswiezeniem,
+					# wiec nie ma naszych wierszy
+				if time.time() - start_time > MAX_WAIT:
+					raise e
+				time.sleep(0.5)
