@@ -1,7 +1,7 @@
 from .base import FunctionalTest
 from selenium.webdriver.common.keys import Keys
 from unittest import skip
-	
+
 MAX_WAIT = 10 #maksymalny czas czekania na glicze
 
 class ItemValidationTest(FunctionalTest):
@@ -15,7 +15,7 @@ class ItemValidationTest(FunctionalTest):
 		# The home page refreshes, and there is an error message saying
 		# that list items acnnot be blank
 		self.wait_for(lambda: self.assertEqual(
-			self.browser.find_element_by_css_selector(".has-error").text,
+			self.browser.find_element_by_css_selector(".has-error").text.strip(),
 			"You can't have an empty list item"
 		))
 		# She tries again awith some text for the item, which now works
@@ -28,7 +28,7 @@ class ItemValidationTest(FunctionalTest):
 
 		# She receives a similar warning on the list page
 		self.wait_for(lambda: self.assertEqual(
-			self.browser.find_element_by_css_selector(".has-error").text
+			self.browser.find_element_by_css_selector(".has-error").text,
 			"You can't have an empty list item"
 			))
 		# And she can correct it by filling some text in
