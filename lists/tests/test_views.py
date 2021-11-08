@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from lists.models import Item, List
 from django.utils.html import escape
 from lists.views import home_page # Widok, ktory uzyjemy zaraz, przechowywany w folderze lists w pliku views.py
-
+from lists.forms import ItemForm
 
 class  HomePageTest(TestCase):
 
@@ -21,6 +21,10 @@ class  HomePageTest(TestCase):
 		# self.assertTrue(html.startswith('<html>'))
 		# self.assertIn('<title>To-Do lists</title>', html)
 		# self.assertTrue(html.strip().endswith('</html>'))
+
+	def test_home_page_use_item_form(self):
+		response = self.client.get("/")
+		self.assertIsInstance(response.context["form"], ItemForm)
 
 class ListViewTest(TestCase):
 
