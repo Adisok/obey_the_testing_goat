@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from lists.views import home_page # Widok, ktory uzyjemy zaraz, przechowywany w folderze lists w pliku views.py
 
 
-
 class ItemModelTest(TestCase):
 
 	def test_default_text(self):
@@ -62,5 +61,3 @@ class ListModelTest(TestCase):
 				list(Item.objects.all()),
 				[item1, item2, item3]
 		)
-
-
