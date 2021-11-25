@@ -9,7 +9,7 @@ class MyListTest(FunctionalTest):
 
 	def create_pre_authenticated_session(self, email):
 		user = User.objects.create(email=email)
-		session = SessionsStore()
+		session = SessionStore()
 		session[SESSION_KEY] = user.pk
 		session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
 		session.save()
@@ -31,4 +31,3 @@ class MyListTest(FunctionalTest):
 		self.create_pre_authenticated_session(email)
 		self.browser.get(self.live_server_url)
 		self.wait_to_be_logged_in(email)
-		
