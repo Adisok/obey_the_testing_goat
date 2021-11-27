@@ -22,15 +22,13 @@ class LoginTest(FunctionalTest):
 				self.browser.find_element_by_tag_name("body").text
 			))
 		# A message appears telling her an email has been sent
-		email = mail.outbox[0]
-		self.assertIn(TEST_EMAIL, email.to)
-		self.assertEqual(email.subject, SUBJECT)
+		body = self.wait_for_email(TEST_EMAIL, SUBJECT)
 
 		# It has a url link in it
-		self.assertIn("Use this link to log in", email.body)
-		url_search = re.search(r"http://.+/.+$", email.body)
+		self.assertIn("Use this link to log in", body)
+		url_search = re.search(r"http://.+/.+$", body)
 		if not url_search:
-			self.fail(f"Could not find url in email:\n{email.body}")
+			self.fail(f"Could not find url in email:\n{body}")
 		url = url_search.group(0)
 		self.assertIn(self.live_server_url, url)
 
