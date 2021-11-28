@@ -4,6 +4,8 @@ from django.contrib import messages, auth
 from accounts.models import Token
 from django.core.urlresolvers import reverse
 import sys
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 def send_login_email(request):
@@ -27,6 +29,3 @@ def login(request):
 	if user is not None:
 		auth.login(request, user)	
 	return redirect("/")
-
-def my_lists(request):
-	pass
