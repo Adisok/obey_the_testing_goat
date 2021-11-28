@@ -4,7 +4,7 @@ from .base import FunctionalTest
 from .management.commands.create_session import create_pre_authenticated_session
 from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY, get_user_model
 User = get_user_model()
-
+from time import sleep
 
 class MyListTest(FunctionalTest):
 
@@ -25,10 +25,10 @@ class MyListTest(FunctionalTest):
 
 		# She goes to the home page and starts a list
 		self.browser.get(self.live_server_url)
+
 		self.add_list_item("Reticulate splines")
 		self.add_list_item("Immanentize eschaton")
 		first_list_url = self.browser.current_url
-
 		# She notices a "My lists" link, for the first time.
 		self.browser.find_element_by_link_text("My lists").click()
 
@@ -43,13 +43,15 @@ class MyListTest(FunctionalTest):
 
 		# She decides to start another lists, jus to see
 		self.browser.get(self.live_server_url)
-		self.add_list_item("Click cows")
+		self.wait_for(
+			lambda: self.add_list_item("Click cows")
+		)
 		second_list_url = self.browser.current_url
-
 		# Under "My lists", her new lists appears
+
 		self.browser.find_element_by_link_text("My lists").click()
 		self.wait_for(
-			lambda: self.find_element_by_link_text("Click cows")
+			lambda: self.browser.find_element_by_link_text("Click cows")
 			)
 		self.browser.find_element_by_link_text("Click cows").click()
 		self.wait_for(
@@ -57,10 +59,16 @@ class MyListTest(FunctionalTest):
 			)
 
 		# She logs out. The "My lists" option disappears
-		self.browser.find_element_by_link_text("Log out").click()
+		#sleep(1)
+
+		self.browser.find_element_by_link_text("Log out")
+		self.wait_for(
+			lambda: self.browser.find_element_by_link_text("Log out").click()
+		)
+
 		self.wait_for(
 			lambda: self.assertEqual(
-				self.browser.find_element_by_link_text("My lists"),
+				self.browser.find_elements_by_link_text("My lists"),
 				[]
 				)
 			)

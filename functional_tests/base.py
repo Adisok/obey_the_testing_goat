@@ -14,7 +14,7 @@ def wait(fn):
 		while True:
 			try:
 				return fn(*args, **kwargs)
-			except (AssertionError, WebDriverException) as e:
+			except Exception as e:
 				if time.time() - start_time > MAX_WAIT:
 					raise e
 				time.sleep(0.5)
@@ -39,10 +39,10 @@ class FunctionalTest(StaticLiveServerTestCase):
 		return self.browser.find_element_by_id("id_text")
 
 	def add_list_item(self, item_text):
-		num_rows = len(self.browser.find_element_by_css_selector('#id_list_table'))
+		num_rows = len(self.browser.find_elements_by_css_selector('#id_list_table tr'))
 		self.get_item_input_box().send_keys(item_text)
 		self.get_item_input_box().send_keys(Keys.ENTER)
-		item_number += 1
+		item_number = num_rows + 1	
 		self.wait_for_row_in_list_table(f'{item_number}: {item_text}')
 
 	@wait
@@ -58,13 +58,13 @@ class FunctionalTest(StaticLiveServerTestCase):
 	@wait
 	def wait_to_be_logged_in(self, email):
 		self.browser.find_element_by_link_text('Log out')
-		navbar = self.browser.find_element_by_css_selector('.navbar')
+		navbar = self.browser.find_elements_by_css_selector('.navbar')
 		self.assertIn(email, navbar.text)
 
 	@wait
 	def wait_to_be_logged_out(self, email):
 		self.browser.find_element_by_name("email")
-		navbar = self.browser.find_element_by_css_selector('.navbar')
+		navbar = self.browser.find_elements_by_css_selector('.navbar')
 		self.assertNotIn(email, navbar.text)
 
 	@wait
